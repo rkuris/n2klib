@@ -38,22 +38,21 @@ do a fresh start. The things I am after:
    Currently uses <functional> and <vector>, both seems to
    have good implementations on arduino.
 
-= General Usage
+# General Usage
 
 First, decide if you want a receiver or a transciever. If
 you want to transmit, you must receive for address negotiation.
 
 For a receiver:
 
-    #include "n2k-rx.h"
-    #include "generated/temperature.hcc"
+    #include "n2k.h"
+    #include "generated/temperature.cc"
 
     n2k::Receiver r;
 
-    n2k::temperature & t;
-
-    void handler(t) {
-	Serial.println(t.getactualTemperature())
+    void handler(const Packet &p) {
+        n2k::Temperature t(p);
+	Serial.println(t.getActualTemperature())
     }
 
     void setup() {

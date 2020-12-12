@@ -6,6 +6,7 @@
 namespace n2k {
   class TemperatureExtendedRange : public Message {
   public:
+    TemperatureExtendedRange(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
     unsigned char getInstance() { return Get(8,8); };
     unsigned char getSource() { return Get(16,8); };

@@ -355,7 +355,7 @@ namespace n2k
 
   };
 
-  using CallbackFunc = std::function < void (Message & msg) >;
+  using CallbackFunc = std::function < void (const Message & msg) >;
 
 /*! \brief A callback for a given pgn
  *       

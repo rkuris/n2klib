@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoTransportProtocolDataTransfer : public Message {
   public:
+    IsoTransportProtocolDataTransfer(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
      getData() { return Get(8,56); };
     static const pgn_t PGN = 60160;

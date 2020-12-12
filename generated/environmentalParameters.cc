@@ -6,6 +6,7 @@
 namespace n2k {
   class EnvironmentalParameters : public Message {
   public:
+    EnvironmentalParameters(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
     unsigned char getTemperatureSource() { return Get(8,6); };
     enum {

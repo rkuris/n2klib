@@ -5,7 +5,7 @@
 
 using namespace n2k;
 
-void handleTemp(n2k::Message&);
+void handleTemp(const n2k::Message&);
 
 int main(int argc, char *argv[]) {
 	// first, set up a generic receiver
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	r.ingest(p);
 }
 
-void handleTemp(n2k::Message &m) {
+void handleTemp(const n2k::Message &m) {
 	printf("got temp\n");
 	n2k::Temperature t(m);
 	printf("t.PGN = %ld\n", t.PGN);

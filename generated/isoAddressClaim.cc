@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoAddressClaim : public Message {
   public:
+    IsoAddressClaim(const Message &m) : Message(m) {};
     unsigned long getUniqueNumber() { return Get(0,21); };
     unsigned short getManufacturerCode() { return Get(21,11); };
     unsigned char getDeviceInstanceLower() { return Get(32,3); };
