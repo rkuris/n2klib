@@ -5,6 +5,8 @@
 #include <vector>
 #include <cstring>
 
+#include "./intmem/intmem.h"
+
 #define MISALIGNED_OK 0
 
 namespace n2k
@@ -172,12 +174,12 @@ namespace n2k
 	    {
 	    case 8:
 	      return data[startbyte];
-#if (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) && MISALIGNED_OK
 	    case 16:
-	      return *((PACKED short *) (data + startbyte));
+	      return intmem::loadu_le<uint16_t>(data + startbyte);
 	    case 32:
-	      return *((PACKED long *) (data + startbyte));
-#endif
+	      return intmem::loadu_le<uint32_t>(data + startbyte);
+	    case 64:
+	      return intmem::loadu_le<uint64_t>(data + startbyte);
 	    }
 	}
       unsigned long result = 0;

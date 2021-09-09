@@ -1,0 +1,3 @@
+[submodule "intmem"]
+	path = intmem
+	url = https://github.com/aguinet/intmem.git

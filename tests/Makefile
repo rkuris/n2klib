@@ -13,6 +13,5 @@ packet_test: packet_test.cpp
 generic: generic.cpp ../n2k.h
 	$(CXX) $(CXXFLAGS) $< -o $@
 
-
 clean:
 	rm ./packet_test ./generic
