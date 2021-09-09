@@ -17,7 +17,7 @@ namespace n2k {
         Main_Cabin_Temperature = 4,
         Live_Well_Temperature = 5,
         Bait_Well_Temperature = 6,
-        Refridgeration_Temperature = 7,
+        Refrigeration_Temperature = 7,
         Heating_System_Temperature = 8,
         Dew_Point_Temperature = 9,
         Apparent_Wind_Chill_Temperature = 10,
@@ -31,8 +31,8 @@ namespace n2k {
         Inside = 0,
         Outside = 1
     };
-    double getTemperature() { return 0.01 * Get(16,16); };
-    double getHumidity() { return 0.004 * Get(32,16); };
+    double getTemperature() { return 0.010000 * Get(16,16); };
+    double getHumidity() { return 0.004000 * Get(32,16); };
     unsigned short getAtmosphericPressure() { return Get(48,16); };
     static const pgn_t PGN = 130311;
     static const PGNType Type = PGNType::Single;

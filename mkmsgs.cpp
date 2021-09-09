@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 		     60160, /* multi packet data transfer TP.DT */
 		     60416, /* multi packet conn mgmt TP.CM */
 		     60928, /* iso address claim */
+		     130306, /* environmental parameters */
 		     130310, /* environmental parameters */
 		     130311, /* environmental parameters */
 		     130312, /* temperature */
@@ -79,13 +80,18 @@ int main(int argc, char *argv[]) {
 	    id[0] = toupper(id[0]);
 	    string getter = "Get(" + to_string(off) + "," + to_string(len) + ")";
 	    if (field->contains("Resolution")) {
+	        auto factor = 1.0;
 	        auto res = field->at("Resolution");
-		string res_string;
-		if (res.is_string()) {
-			res_string = res.get<string>();
-		} else {
-			res_string = to_string(res.get<double>());
-		}
+		if (field->contains("Units")) {
+		   auto units = field->at("Units").get<string>();
+		   if (units == "rad") {
+		       factor = 180/M_PI;
+		   } else if (units == "m/s") {
+		       factor = 1.94384;
+		   }
+	        }
+		auto resDouble = res.get<double>();
+		string res_string = to_string(factor * resDouble);
 			
 	    	return "double get" + id + "() { return " + res_string + " * " + getter + "; }";
 	    }
