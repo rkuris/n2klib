@@ -7,8 +7,6 @@
 
 #include "./intmem/intmem.h"
 
-#define MISALIGNED_OK 0
-
 namespace n2k
 {
   typedef unsigned long canid_t;	// a CANbus identifier
@@ -17,6 +15,7 @@ namespace n2k
   typedef unsigned char addr_t;	// src or destination
   // Only certain PGNs have a destination
   const addr_t CAN_BROADCAST_ADDR = 0xff;
+  const canid_t EFF_FRAME = 0x80000000U;
 
 
   /*! PGNType is either SINGLE_PACKET or FAST_PACKET
@@ -38,6 +37,10 @@ namespace n2k
     static const int MAX_CAN_DATA = 8;
 
     Packet() : canid{0} {}
+    Packet(canid_t canid_, unsigned char *data_) : canid{canid_} {
+	    memcpy(data, data_, MAX_CAN_DATA);
+    }
+
     canid_t canid;
     unsigned char data[MAX_CAN_DATA];	// TODO: Can we make these pointers?
   /*! getPriority fetches the priority from a canid
@@ -80,11 +83,13 @@ namespace n2k
    */
   inline void setPGN (pgn_t pgn)
   {
+    canid |= pgn&0xff;
+    canid |= EFF_FRAME;
     unsigned char hi = pgn >> 8;
     if (hi < 240)
       {
 	// PDU1 format
-	canid |= (((canid_t) pgn) << 8) & 0xff0000;
+	canid |= (((canid_t) pgn) << 8);
 	return;
       }
     canid |= ((canid_t) pgn) << 8;

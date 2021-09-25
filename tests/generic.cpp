@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
 }
 
 void handleTemp(const n2k::Message &m) {
-	printf("got temp\n");
 	n2k::Temperature t(m);
-	printf("t.PGN = %ld\n", t.PGN);
+	assert(t.PGN == 130312);
 	printf("t.getActualTemperature() = %f\n", t.getActualTemperature());
+	assert(t.getActualTemperature() == 0.01);
 }
