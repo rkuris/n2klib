@@ -6,6 +6,7 @@
 namespace n2k {
   class WindData : public Message {
   public:
+    WindData() {};
     WindData(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
     double getWindSpeed() { return 0.019438 * Get(8,16); };

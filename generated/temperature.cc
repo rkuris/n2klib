@@ -6,6 +6,7 @@
 namespace n2k {
   class Temperature : public Message {
   public:
+    Temperature() {};
     Temperature(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
     unsigned char getInstance() { return Get(8,8); };

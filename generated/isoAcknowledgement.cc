@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoAcknowledgement : public Message {
   public:
+    IsoAcknowledgement() {};
     IsoAcknowledgement(const Message &m) : Message(m) {};
     unsigned char getControl() { return Get(0,8); };
     enum {

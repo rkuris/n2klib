@@ -6,6 +6,7 @@
 namespace n2k {
   class ConfigurationInformation : public Message {
   public:
+    ConfigurationInformation() {};
     ConfigurationInformation(const Message &m) : Message(m) {};
     unsigned short getInstallationDescription1() { return Get(0,16); };
     unsigned short getInstallationDescription2() { return Get(-1,16); };

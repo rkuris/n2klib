@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoTransportProtocolConnectionManagementAbort : public Message {
   public:
+    IsoTransportProtocolConnectionManagementAbort() {};
     IsoTransportProtocolConnectionManagementAbort(const Message &m) : Message(m) {};
     unsigned char getGroupFunctionCode() { return Get(0,8); };
     unsigned char getReason() { return Get(8,8); };

@@ -6,6 +6,7 @@
 namespace n2k {
   class NmeaAcknowledgeGroupFunction : public Message {
   public:
+    NmeaAcknowledgeGroupFunction() {};
     NmeaAcknowledgeGroupFunction(const Message &m) : Message(m) {};
     double getFunctionCode() { return 1.000000 * Get(0,8); };
     double getPgn() { return 1.000000 * Get(8,24); };

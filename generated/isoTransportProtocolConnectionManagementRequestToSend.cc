@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoTransportProtocolConnectionManagementRequestToSend : public Message {
   public:
+    IsoTransportProtocolConnectionManagementRequestToSend() {};
     IsoTransportProtocolConnectionManagementRequestToSend(const Message &m) : Message(m) {};
     unsigned char getGroupFunctionCode() { return Get(0,8); };
     unsigned short getMessageSize() { return Get(8,16); };

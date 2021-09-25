@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoTransportProtocolConnectionManagementEndOfMessage : public Message {
   public:
+    IsoTransportProtocolConnectionManagementEndOfMessage() {};
     IsoTransportProtocolConnectionManagementEndOfMessage(const Message &m) : Message(m) {};
     unsigned char getGroupFunctionCode() { return Get(0,8); };
     unsigned short getTotalMessageSize() { return Get(8,16); };

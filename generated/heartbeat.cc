@@ -6,6 +6,7 @@
 namespace n2k {
   class Heartbeat : public Message {
   public:
+    Heartbeat() {};
     Heartbeat(const Message &m) : Message(m) {};
     double getDataTransmitOffset() { return 0.001000 * Get(0,16); };
     double getSequenceCounter() { return 1.000000 * Get(16,8); };

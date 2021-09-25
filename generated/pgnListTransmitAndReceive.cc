@@ -6,6 +6,7 @@
 namespace n2k {
   class PgnListTransmitAndReceive : public Message {
   public:
+    PgnListTransmitAndReceive() {};
     PgnListTransmitAndReceive(const Message &m) : Message(m) {};
     unsigned char getFunctionCode() { return Get(0,8); };
     enum {

@@ -6,6 +6,7 @@
 namespace n2k {
   class ProductInformation : public Message {
   public:
+    ProductInformation() {};
     ProductInformation(const Message &m) : Message(m) {};
     unsigned short getNmea2000Version() { return Get(0,16); };
     unsigned short getProductCode() { return Get(16,16); };

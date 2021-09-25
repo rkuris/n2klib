@@ -26,6 +26,7 @@ const char *tstr = R"TEMPLATE(// class {{ Id }}
 namespace n2k {
   class {{ Id }} : public Message {
   public:
+    {{ Id }}() {};
     {{ Id }}(const Message &m) : Message(m) {};
 ## if isArray(Fields)
 ##  for field in Fields

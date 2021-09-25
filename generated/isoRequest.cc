@@ -6,6 +6,7 @@
 namespace n2k {
   class IsoRequest : public Message {
   public:
+    IsoRequest() {};
     IsoRequest(const Message &m) : Message(m) {};
     double getPgn() { return 1.000000 * Get(0,24); };
     static const pgn_t PGN = 59904;
