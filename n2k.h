@@ -198,7 +198,7 @@ namespace n2k
       while (remain > 0)
 	{
 	  result = result << 1;
-	  result |= data[startbyte] & (1 << startbit);
+	  result |= (data[startbyte] & (1 << startbit)) >> startbit;
 	  startbit++;
 	  if (startbit > 7)
 	    {
