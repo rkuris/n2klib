@@ -57,11 +57,21 @@ int main(int argc, char *argv[]) {
     pgnfile >> j;
 
     mkdir("generated", 0777);
-    int needed[] = { 59392, /* iso ack */
+    int needed[] = { 
+		     // required for transmission
+		     59392, /* iso ack */
 	    	     59904, /* iso req */
 		     60160, /* multi packet data transfer TP.DT */
 		     60416, /* multi packet conn mgmt TP.CM */
 		     60928, /* iso address claim */
+		     126208, /* group function */
+		     126464, /* PGN list */
+		     126993, /* Heartbeat */
+		     126996, /* product information */
+		     126998, /* config information */
+
+		     // user (these should be in argv)
+
 		     130306, /* environmental parameters */
 		     130310, /* environmental parameters */
 		     130311, /* environmental parameters */
@@ -75,7 +85,10 @@ int main(int argc, char *argv[]) {
     env.add_callback("funcfor", 1, [](Arguments& args) {
 	    auto field = args.at(0);
 	    int len = field->at("BitLength").get<int>();
-	    int off = field->at("BitOffset").get<int>();
+	    int off = -1;
+	    if (field->contains("BitOffset")) {
+	        off = field->at("BitOffset").get<int>();
+	    }
 	    string id = field->at("Id").get<string>();
 	    id[0] = toupper(id[0]);
 	    string getter = "Get(" + to_string(off) + "," + to_string(len) + ")";
@@ -114,6 +127,7 @@ int main(int argc, char *argv[]) {
     Template temp = env.parse(tstr);
     for (json::iterator it = pgns.begin(); it != pgns.end(); ++it) {
 	    auto pgnid = (*it)["PGN"].get<int>();
+	    cout << "Processing PGN " << pgnid << "\n";
 	    if (binary_search(needed, needed + sizeof(needed) / sizeof(int), pgnid)) {
 		    string classname = (*it)["Id"].get<string>();
 		    string filename = "generated/" + classname + ".cc";

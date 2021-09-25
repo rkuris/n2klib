@@ -1,6 +1,6 @@
 .PHONY: tests generated
 # no -Wshadow since the inja library has several
-CXXWARNS = -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wmissing-declarations -Winline -Wundef -Wcast-qual -Wwrite-strings -Wno-unused-parameter -Wfloat-equal
+CXXWARNS = -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wmissing-declarations -Winline -Wundef -Wcast-qual -Wwrite-strings -Wno-unused-parameter
 CXXFLAGS = $(CXXWARNS) -std=c++11 -pedantic -Wno-psabi -g
 LDFLAGS = -lpthread
 

@@ -37,6 +37,9 @@ do a fresh start. The things I am after:
    means most of the C++ standard library is off-limits.
    Currently uses <functional> and <vector>, both seems to
    have good implementations on arduino.
+ - Message class generation uses the full library, so if
+   you need to change the list of built classes, you'll need
+   to run this on a linux box.
 
 # General Usage
 
@@ -68,5 +71,3 @@ For a receiver:
 Packet reading itself depends a lot on the device. On a
 teensy, you can use an event-based reader; see the examples
 directory for details.
-
-
