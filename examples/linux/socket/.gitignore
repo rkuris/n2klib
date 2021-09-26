@@ -3,3 +3,5 @@ simple
 wind2rrd
 n2kto0183
 NMEA0183*
+n2kto0183.o
+n2kto0183.lib

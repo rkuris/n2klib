@@ -1,5 +1,5 @@
 CXXWARNS = -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wmissing-declarations -Wundef -Wcast-qual -Wshadow -Wwrite-strings -Wno-unused-parameter -Wno-unused-function
-CXXFLAGS = $(CXXWARNS) -std=c++11 -pedantic -Wno-psabi -g -pg -I../../..
+CXXFLAGS = $(CXXWARNS) -std=c++11 -pedantic -Wno-psabi -O -pg -I../../..
 NMEA0183SRC = $(HOME)/NMEA0183
 
 all: wind2rrd simple
@@ -27,4 +27,4 @@ astyle:
 	astyle -n *.cpp *.h
 
 clean:
-	rm wind2rrd simple
+	rm -f $$(tail +2 .gitignore)

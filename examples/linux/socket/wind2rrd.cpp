@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
         n2k::WindData::Type,
         handleWind);
     r.addCallback(cb);
+    r.applyKernelFilter();
     r.run();
 }
 void handleWind(const n2k::Message & m)
