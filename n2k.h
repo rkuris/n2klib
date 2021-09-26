@@ -1,3 +1,10 @@
+/*!
+ * \file n2k.h
+ * \brief Core n2k functionality
+ *
+ * You'll need this include first when working with
+ * this library.
+ */
 #pragma once
 
 #include <assert.h>
@@ -28,8 +35,11 @@ namespace n2k
     Fast,
   };
 
-  /*! Contains a single 8 byte packet that fits on
-   *  the canbus
+  /*! \brief 8-byte packet (frame)
+   *
+   * Contains a single 8 byte packet that fits on the canbus
+   * TODO: Rename this to Frame since that's the term used
+   * on the canbus.
    */
   class Packet
   {
@@ -135,7 +145,8 @@ namespace n2k
 
   };
 
-  /*! Contains a single NMEA 2000 message.
+  /*!
+   * \brief Contains a single NMEA 2000 message.
    *
    * Message is a class containing a single NMEA message.
    * These can be assembled from Packet classes, typically
@@ -216,9 +227,10 @@ namespace n2k
  */
   typedef unsigned short PoolSizeType;
 
-  /*! Contains a Message along with state information
-   *  used while gathering portions of a packet
+  /*! \brief Message with state info
    *
+   * Contains a Message along with state information
+   * used while gathering portions of a packet
    *
    */
   class MessageWithState:public Message
@@ -362,14 +374,17 @@ namespace n2k
 
   };
 
+  /*! \typedef CallbackFunc
+   *  \brief A std::function that takes a Message reference
+   */
   using CallbackFunc = std::function < void (const Message & msg) >;
 
-/*! \brief A callback for a given pgn
+/*! \brief Holds a PGN and a callback function
  *       
  *  If the pgn matches, the callback is called, passing
  *  the Message class to the callback function
  *
- *  Arrays of these are passed around in CallbackList
+ *  Vectors of these are passed around in CallbackList
  */
   class Callback
   {
@@ -385,7 +400,7 @@ namespace n2k
     CallbackFunc mcallback;
   };
 
-  /*! A vector of callbacks
+  /*! \brief A vector of callbacks
    */
   class CallbackList
   {
@@ -410,11 +425,17 @@ namespace n2k
   };
 
 
+  /*! \brief Message assembler from Packet
+   *
+   * This class contains all the stuff needed to construct
+   * N2k::Message objects from Packets. It expects for someone
+   * to call Receiver::ingest on each received packet.
+   */
   class Receiver
   {
   public:
 
-    /*! The default constructor is usually unless you want to provide
+    /*! The default constructor is usually fine unless you want to provide
      *  callbacks on instantiation or you want to change the size of
      *  the MessagePool
      */

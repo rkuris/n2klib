@@ -12,16 +12,17 @@ do a fresh start. The things I am after:
    not.
  - Separation of packet to message processing. The source
    of packets should be completely abstracted from the
-   handling of them. This library primarily deals with
-   handling them, with examples of how to get them from
-   different environments.
+   handling of them. There are readers and transmitters
+   for linux canbus, as well as arduino.
  - Clean API. Create n2k::Receiver, add n2k::Callback,
-   and call Receiver:ingest with your packets.
+   and call Receiver::ingest with your packets.
  - Fast discard. If nobody cares about a specific message
-   PGN, then don't bother doing anything with it.
+   PGN, then don't bother doing anything with it. On linux,
+   this includes kernel filtering for efficiency.
  - Autogeneration. Classes should be generated from
    a DSL or another definition file, reducing the chance
-   of a coding error on a particular message type.
+   of a coding error on a particular message type, or some
+   non-intuitive difference in handling a specific message.
  - Tests. I am a firm believer that the tests shouldn't
    need access to a CANbus. There should be unit tests
    that prove that each case works correctly.
@@ -30,16 +31,19 @@ do a fresh start. The things I am after:
    in a message.
  - Minimal (perhaps zero) memory alloctions at runtime.
    Everything should be static if possible. That said,
-   I'm sticking with <vector> for callbacks for the
+   I'm sticking with &lt;vector> for callbacks for the
    initial release. It would be nice to give a static
    CallbackList to a receiver.
  - Few dependencies. It needs to compile on arduino, which
    means most of the C++ standard library is off-limits.
-   Currently uses <functional> and <vector>, both seems to
+   Currently uses &lt;functional> and &lt;vector>, both seems to
    have good implementations on arduino.
  - Message class generation uses the full library, so if
    you need to change the list of built classes, you'll need
    to run this on a linux box.
+ - Single include. This is harder with multiple platforms,
+   although as a library it's very nice to just include and
+   be done with dependencies.
 
 # General Usage
 
@@ -48,25 +52,25 @@ you want to transmit, you must receive for address negotiation.
 
 For a receiver:
 
-    #include "n2k.h"
-    #include "generated/temperature.cc"
+	#include "n2k.h"
+	#include "generated/temperature.cc"
 
-    n2k::Receiver r;
+	n2k::Receiver r;
 
-    void handler(const Packet &p) {
-        n2k::Temperature t(p);
-	Serial.println(t.getActualTemperature())
-    }
+	void handler(const Packet &p) {
+		n2k::Temperature t(p);
+		Serial.println(t.getActualTemperature())
+	}
 
-    void setup() {
-	r.addListener(t, tempHandler)
-    }
+	void setup() {
+		r.addListener(t, tempHandler)
+	}
 
-    void loop() {
-	// read a Packet here
-	Packet p = ...
-	r.ingest(p);
-    }
+	void loop() {
+		// read a Packet here
+		Packet p = ...
+		r.ingest(p);
+	}
 
 Packet reading itself depends a lot on the device. On a
 teensy, you can use an event-based reader; see the examples
@@ -89,6 +93,6 @@ like this:
 			n2k::WindData::Type,
 			handleWind);
 		r.addCallback(cb);
+		r.applyKernelFilter(); // optional
 		r.run();
 	}
-

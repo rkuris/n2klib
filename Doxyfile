@@ -3,7 +3,7 @@
 DOXYFILE_ENCODING      = UTF-8
 
 PROJECT_NAME           = "n2klib"
-PROJECT_NUMBER         = 0.1
+PROJECT_NUMBER         = 0.2
 PROJECT_BRIEF          = NMEA2000_processing_library
 
 # With the PROJECT_LOGO tag one can specify a logo or an icon that is included
