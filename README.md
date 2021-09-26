@@ -71,3 +71,24 @@ For a receiver:
 Packet reading itself depends a lot on the device. On a
 teensy, you can use an event-based reader; see the examples
 directory for details.
+On linux, if you want to read from a can device, you can
+use `n2ksocket.h` to define `SocketCanReceiver`, and use it
+like this:
+
+	#include "n2k.h"
+	#include "n2ksocket.h"
+	#include "generated/windData.cc"
+
+	void handleWind(const n2k::Message & m);
+
+	int main(int argc, char *argv[])
+	{
+		n2k::SocketCanReceiver r("can0");
+		n2k::Callback cb(
+			n2k::WindData::PGN,
+			n2k::WindData::Type,
+			handleWind);
+		r.addCallback(cb);
+		r.run();
+	}
+

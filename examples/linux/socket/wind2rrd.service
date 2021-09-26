@@ -1,0 +1,13 @@
+[Unit]
+Description=wind2rrd graphing
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/usr/bin/env -C /home/pi/where-your-rrd-file-is /usr/local/bin/wind2rrd
+
+[Install]
+WantedBy=multi-user.target

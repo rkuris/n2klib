@@ -1,6 +1,6 @@
-# Examples
+# wind2rrd
 
-Want to generate a cool graph like this one?
+Want to generate a cool wind speed and direction graph like this one?
 The wind direction is scaled back 10x so 30 means 300 degrees:
 
 ![Example graph](README.png?raw=true "Example")
@@ -18,8 +18,10 @@ rrdcreate -s 1 foo.rrd DS:speed:GAUGE:60:0:100 DS:dir:GAUGE:60:0:360 RRA:AVERAGE
 You'll then need to run this for a while:
 
 ```
-candump can0 | ./candump_reader | rrdtool - >/dev/null &
+wind2rrd
 ```
+
+There's a wind2rrd.service file you can copy over to 
 
 You can then generate some amazing graphs, like the one above,
 using this command:
