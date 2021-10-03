@@ -1,0 +1,5 @@
+<map id="n2k::SocketCanReceiver" name="n2k::SocketCanReceiver">
+<area shape="rect" id="node2" href="$classn2k_1_1Receiver.html" title="Message assembler from Packet. " alt="" coords="97,95,207,121"/>
+<area shape="rect" id="node3" href="$classn2k_1_1CallbackList.html" title="A vector of callbacks. " alt="" coords="5,5,139,32"/>
+<area shape="rect" id="node4" href="$classn2k_1_1MessagePool.html" title="Contains a set of Messages and states. " alt="" coords="163,5,301,32"/>
+</map>
