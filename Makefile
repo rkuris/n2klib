@@ -4,17 +4,21 @@ CXXWARNS = -Wall -Wextra -Wformat-nonliteral -Wcast-align -Wpointer-arith -Wmiss
 CXXFLAGS = $(CXXWARNS) -std=c++11 -pedantic -Wno-psabi -g
 LDFLAGS = -lpthread
 
-all: mkmsgs generated tests
+mkmsgs: mkmsgs.cpp
+
+all: mkmsgs check distcheck
+
+check: generated
 
 generated: mkmsgs
 	./mkmsgs
 
-mkmsgs: mkmsgs.cpp
+distcheck: tests
 
 tests:
 	$(MAKE) -C tests
 
-.PHONY: docs pgns.json clean
+.PHONY: docs pgns.json clean check distcheck
 
 pgns.json:
 	wget https://raw.githubusercontent.com/canboat/canboat/master/analyzer/pgns.json
