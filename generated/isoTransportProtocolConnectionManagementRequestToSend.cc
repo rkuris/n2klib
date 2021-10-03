@@ -12,7 +12,7 @@ namespace n2k {
     unsigned short getMessageSize() { return Get(8,16); };
     unsigned char getPackets() { return Get(24,8); };
     unsigned char getPacketsReply() { return Get(32,8); };
-    double getPgn() { return 1.000000 * Get(40,24); };
+    double getPgn() { return 1 * Get(40,24); };
     static const pgn_t PGN = 60416;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }

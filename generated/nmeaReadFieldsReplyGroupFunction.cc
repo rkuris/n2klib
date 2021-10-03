@@ -6,26 +6,27 @@
 namespace n2k {
   class NmeaReadFieldsReplyGroupFunction : public Message {
   public:
+    enum class IndustryCode:unsigned char {
+      Global = 0,
+      Highway = 1,
+      Agriculture = 2,
+      Construction = 3,
+      Marine = 4,
+      Industrial = 5
+    };
+
     NmeaReadFieldsReplyGroupFunction() {};
     NmeaReadFieldsReplyGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() { return 1.000000 * Get(0,8); };
-    double getPgn() { return 1.000000 * Get(8,24); };
+    double getFunctionCode() { return 1 * Get(0,8); };
+    double getPgn() { return 1 * Get(8,24); };
     unsigned short getManufacturerCode() { return Get(32,11); };
-    unsigned char getIndustryCode() { return Get(45,3); };
-    enum {
-        Global = 0,
-        Highway = 1,
-        Agriculture = 2,
-        Construction = 3,
-        Marine = 4,
-        Industrial = 5
-    };
-    double getUniqueId() { return 1.000000 * Get(48,8); };
+    IndustryCode getIndustryCode() { return (IndustryCode)Get(45,3); };
+    double getUniqueId() { return 1 * Get(48,8); };
     unsigned char getOfSelectionPairs() { return Get(56,8); };
     unsigned char getOfParameters() { return Get(64,8); };
-    double getSelectionParameter() { return 1.000000 * Get(72,8); };
+    double getSelectionParameter() { return 1 * Get(72,8); };
     unsigned char getSelectionValue() { return Get(80,0); };
-    double getParameter() { return 1.000000 * Get(80,8); };
+    double getParameter() { return 1 * Get(80,8); };
     unsigned char getValue() { return Get(88,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;

@@ -6,34 +6,36 @@
 namespace n2k {
   class EnvironmentalParameters : public Message {
   public:
+    enum class TemperatureSource:unsigned char {
+      Sea_Temperature = 0,
+      Outside_Temperature = 1,
+      Inside_Temperature = 2,
+      Engine_Room_Temperature = 3,
+      Main_Cabin_Temperature = 4,
+      Live_Well_Temperature = 5,
+      Bait_Well_Temperature = 6,
+      Refrigeration_Temperature = 7,
+      Heating_System_Temperature = 8,
+      Dew_Point_Temperature = 9,
+      Apparent_Wind_Chill_Temperature = 10,
+      Theoretical_Wind_Chill_Temperature = 11,
+      Heat_Index_Temperature = 12,
+      Freezer_Temperature = 13,
+      Exhaust_Gas_Temperature = 14
+    };
+
+    enum class HumiditySource:unsigned char {
+      Inside = 0,
+      Outside = 1
+    };
+
     EnvironmentalParameters() {};
     EnvironmentalParameters(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
-    unsigned char getTemperatureSource() { return Get(8,6); };
-    enum {
-        Sea_Temperature = 0,
-        Outside_Temperature = 1,
-        Inside_Temperature = 2,
-        Engine_Room_Temperature = 3,
-        Main_Cabin_Temperature = 4,
-        Live_Well_Temperature = 5,
-        Bait_Well_Temperature = 6,
-        Refrigeration_Temperature = 7,
-        Heating_System_Temperature = 8,
-        Dew_Point_Temperature = 9,
-        Apparent_Wind_Chill_Temperature = 10,
-        Theoretical_Wind_Chill_Temperature = 11,
-        Heat_Index_Temperature = 12,
-        Freezer_Temperature = 13,
-        Exhaust_Gas_Temperature = 14
-    };
-    unsigned char getHumiditySource() { return Get(14,2); };
-    enum {
-        Inside = 0,
-        Outside = 1
-    };
-    double getTemperature() { return 0.010000 * Get(16,16); };
-    double getHumidity() { return 0.004000 * Get(32,16); };
+    TemperatureSource getTemperatureSource() { return (TemperatureSource)Get(8,6); };
+    HumiditySource getHumiditySource() { return (HumiditySource)Get(14,2); };
+    double getTemperature() { return 0.01 * Get(16,16); };
+    double getHumidity() { return 0.004 * Get(32,16); };
     unsigned short getAtmosphericPressure() { return Get(48,16); };
     static const pgn_t PGN = 130311;
     static const PGNType Type = PGNType::Single;

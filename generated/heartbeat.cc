@@ -6,31 +6,34 @@
 namespace n2k {
   class Heartbeat : public Message {
   public:
+    enum class Controller1State:unsigned char {
+      Error_Active = 0,
+      Error_Passive = 1,
+      Bus_Off = 2,
+      Not_Available = 3
+    };
+
+    enum class Controller2State:unsigned char {
+      Error_Active = 0,
+      Error_Passive = 1,
+      Bus_Off = 2,
+      Not_Available = 3
+    };
+
+    enum class EquipmentStatus:unsigned char {
+      Operational = 0,
+      Fault = 1,
+      Reserved = 2,
+      Not_Available = 3
+    };
+
     Heartbeat() {};
     Heartbeat(const Message &m) : Message(m) {};
-    double getDataTransmitOffset() { return 0.001000 * Get(0,16); };
-    double getSequenceCounter() { return 1.000000 * Get(16,8); };
-    unsigned char getController1State() { return Get(24,2); };
-    enum {
-        Error_Active = 0,
-        Error_Passive = 1,
-        Bus_Off = 2,
-        Not_Available = 3
-    };
-    unsigned char getController2State() { return Get(26,2); };
-    enum {
-        Error_Active = 0,
-        Error_Passive = 1,
-        Bus_Off = 2,
-        Not_Available = 3
-    };
-    unsigned char getEquipmentStatus() { return Get(28,2); };
-    enum {
-        Operational = 0,
-        Fault = 1,
-        Reserved = 2,
-        Not_Available = 3
-    };
+    double getDataTransmitOffset() { return 0.001 * Get(0,16); };
+    double getSequenceCounter() { return 1 * Get(16,8); };
+    Controller1State getController1State() { return (Controller1State)Get(24,2); };
+    Controller2State getController2State() { return (Controller2State)Get(26,2); };
+    EquipmentStatus getEquipmentStatus() { return (EquipmentStatus)Get(28,2); };
     static const pgn_t PGN = 126993;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }

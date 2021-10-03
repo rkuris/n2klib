@@ -26,19 +26,24 @@ const char *tstr = R"TEMPLATE(// class {{ Id }}
 namespace n2k {
   class {{ Id }} : public Message {
   public:
+## if isArray(Fields)
+##  for field in Fields
+##    if existsIn(field, "EnumValues")
+    enum class {{ idname(field) }}:unsigned char {
+##     for v in field.EnumValues
+      {{ enumname(v.name) }} = {{ v.value }}{% if not loop.is_last %},{% endif %}
+##     endfor
+    };
+
+##    endif
+##  endfor
+## endif
     {{ Id }}() {};
     {{ Id }}(const Message &m) : Message(m) {};
 ## if isArray(Fields)
 ##  for field in Fields
 ##   if field.Id != "reserved"
     {{ funcfor(field) }};
-##    if existsIn(field, "EnumValues")
-    enum {
-##     for v in field.EnumValues
-        {{ enumname(v.name) }} = {{ v.value }}{% if not loop.is_last %},{% endif %}
-##     endfor
-    };
-##    endif
 ##   endif
 ##  endfor
 ## else
@@ -73,6 +78,8 @@ int main(int argc, char *argv[]) {
 
 		     // user (these should be in argv)
 
+		     128259, /* speed through water */
+		     129039, /* AIS type B position report */
 		     130306, /* environmental parameters */
 		     130310, /* environmental parameters */
 		     130311, /* environmental parameters */
@@ -83,6 +90,12 @@ int main(int argc, char *argv[]) {
 
     json pgns = j["PGNs"];
     Environment env;
+    env.add_callback("idname", 1, [](Arguments& args) {
+       auto field = args.at(0);
+       string id = field->at("Id").get<string>();
+       id[0] = toupper(id[0]);
+       return id;
+    });
     env.add_callback("funcfor", 1, [](Arguments& args) {
 	    auto field = args.at(0);
 	    int len = field->at("BitLength").get<int>();
@@ -105,20 +118,25 @@ int main(int argc, char *argv[]) {
 		   }
 	        }
 		auto resDouble = res.get<double>();
-		string res_string = to_string(factor * resDouble);
+		char dbl[32];
+		std::snprintf(dbl, sizeof(dbl), "%G", factor * resDouble);
 			
-	    	return "double get" + id + "() { return " + res_string + " * " + getter + "; }";
+			return "double get" + id + "() { return " + dbl + " * " + getter + "; }";
 	    }
 	    string type;
-	    if (len <= 8)
-	    	type = "unsigned char";
+	    string cast = "";
+	    if (field->contains("EnumValues")) {
+		type = id;
+		cast = "(" + type + ")";
+	    } else if (len <= 8)
+		type = "unsigned char";
 	    else if (len <=16)
-	        type ="unsigned short";
+		type ="unsigned short";
 	    else if (len < 32)
 		    type = "unsigned long";
 	    else
 		type = "";
-	    return string(type + " get" + id + "() { return " + getter + "; }");
+	    return string(type + " get" + id + "() { return " + cast + getter + "; }");
     });
     env.add_callback("enumname", 1, [](Arguments& args) {
 	    regex e ("[^A-Za-z0-9]+");

@@ -6,17 +6,18 @@
 namespace n2k {
   class IsoAcknowledgement : public Message {
   public:
+    enum class Control:unsigned char {
+      ACK = 0,
+      NAK = 1,
+      Access_Denied = 2,
+      Address_Busy = 3
+    };
+
     IsoAcknowledgement() {};
     IsoAcknowledgement(const Message &m) : Message(m) {};
-    unsigned char getControl() { return Get(0,8); };
-    enum {
-        ACK = 0,
-        NAK = 1,
-        Access_Denied = 2,
-        Address_Busy = 3
-    };
+    Control getControl() { return (Control)Get(0,8); };
     unsigned char getGroupFunction() { return Get(8,8); };
-    double getPgn() { return 1.000000 * Get(40,24); };
+    double getPgn() { return 1 * Get(40,24); };
     static const pgn_t PGN = 59392;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }
