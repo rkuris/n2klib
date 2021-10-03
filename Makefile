@@ -6,9 +6,9 @@ LDFLAGS = -lpthread
 
 mkmsgs: mkmsgs.cpp
 
-all: mkmsgs check distcheck
+all: mkmsgs generated distcheck
 
-check: generated
+check: pgns.json generated
 
 generated: mkmsgs
 	./mkmsgs
