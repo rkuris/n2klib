@@ -236,8 +236,9 @@ namespace n2k
   class MessageWithState:public Message
   {
   public:
-    unsigned char m_busy:1,	/* 1 indicates given to handler */
-      m_sequence:4;
+    unsigned short m_busy:1,	/* 1 indicates given to handler */
+      m_next:5,			/* next packet expected sequence */
+      m_last:5;			/* last packet sequence */
     pgn_t m_pgn;
     unsigned char m_age;
   };
@@ -254,16 +255,7 @@ namespace n2k
    * is fetched.
    *
    * Message objects managed by this class start off
-   * !inuse !busy, and m_sequence is unused.
-   *
-   * The getFree method first looks for one with
-   * m_pgn==0. While looking, anyone with non-zero
-   * m_pgn values get an increase to m_age. If the
-   * value overflows back to 0, then the packet
-   * is freed (256 times we have hunted for a new
-   * Message and haven't finished this one yet).
-   * If we can't find any free ones, then we discard
-   * the highest one. This can cause some thrashing.
+   * with m_busy = 0
    */
   class MessagePool
   {
@@ -302,7 +294,7 @@ namespace n2k
      * @return If this completes a Message, then a pointer
      *         to the message is returned, otherwise nullptr.
      */
-    Message *ingest (const Packet & packet, const PGNType type)
+    MessageWithState *ingest (const Packet & packet, const PGNType type)
     {
       in++;
       switch (type)
@@ -316,8 +308,43 @@ namespace n2k
 	  }
 
 	case PGNType::Fast:
-	  // TODO 
-	  assert (false);
+	  auto order = packet.data[0] & kPacketMask;
+	  auto pgn = packet.getPGN();
+	  if (order == 0) {
+		// first of set of packets
+		MessageWithState & m = getFree ();
+	        std::memcpy(m.data, packet.data + 2, sizeof(packet.data) - 2);
+		m.m_next = 1;
+		m.m_busy = 1;
+		m.m_pgn = pgn;
+		// The last packet is easy to compute
+		//  N   D (data sizes)
+		//  0   1-6
+		//  1   7-13
+		//  2   14-20
+		// so we just divide by 7 and round down
+		m.m_last = packet.data[1] / 7;
+		return nullptr;
+	  } else {
+		MessageWithState *m = find(pgn);
+		if (m == nullptr) {
+			// couldn't find first packet
+		       return nullptr;
+		}
+		if (order != m->m_next) {
+			// wrong next packet
+			m->m_busy = 0;
+			return nullptr;
+		}
+	        std::memcpy(m->data + 6 + (order-1)*7, packet.data + 1, sizeof(packet.data) - 1);
+		if (order == m->m_last) {
+			// got it all
+			return m;
+		}
+		// now look for next packet
+		m->m_next++;
+		return nullptr;
+	  }
 	}
       assert (false);		// oops, unknown type
     }
@@ -327,16 +354,38 @@ namespace n2k
     int in;
     int out;
     int discards;
+    const int kPacketMask = 0x1f;
 
   private:
+    MessageWithState * find(pgn_t pgn)
+    {
+      for (auto it = std::begin (mPool); it != std::end (mPool); ++it)
+      {
+	  if (it->m_busy == 0)
+	     continue;
+	  if (it->m_pgn == pgn)
+	     return &*it;
+      }
+      // oops, we couldn't find it. This can happen at startup if
+      // we see the back half of a packet
+      return nullptr;
+    }
+    /*! \brief Get a free MessageWithState
+     *
+     * This method walks the list of items in the pool
+     * and finds an entry that:
+     *  - is not being assembled or handed to a callback (m_busy==0)
+     *  - An entry that's been around for 256 messages and hasn't been
+     *    completed (m_age overflowed)
+     *  - The oldest message (largest m_age)
+     */
     MessageWithState & getFree ()
     {
       MessageWithState *best = nullptr, *oldest = nullptr;
 
       for (auto it = std::begin (mPool); it != std::end (mPool); ++it)
 	{
-	  // zeroed pgn and not busy
-	  if (it->m_pgn == 0 && it->m_busy == 0)
+	  if (it->m_busy == 0)
 	    {
 	      best = &*it;
 	    }
@@ -355,10 +404,12 @@ namespace n2k
 	}
       if (best != nullptr)
 	{
+	  best->m_busy = 1;
 	  return *best;
 	}
       // we couldn't find a free one, so nuke the oldest
       makeFree (*oldest);
+      oldest->m_busy = 1;
       return *oldest;
     }
 
@@ -477,7 +528,7 @@ namespace n2k
     void ingest (const Packet & packet)
     {
       // search for packet.canid in the callbacks
-      Message *msg = nullptr;
+      MessageWithState *msg = nullptr;
       for (auto it = std::begin (mCallbackList->mCallbacks);
 	   it != std::end (mCallbackList->mCallbacks); ++it)
 	{
@@ -498,6 +549,11 @@ namespace n2k
 	      // msg can't be a nullptr at this point
 	      it->mcallback (*msg);
 	    }
+	}
+        // callbacks all done, this message is now available
+	// for reuse
+        if (msg != nullptr) {
+	    msg->m_busy = 0;
 	}
     }
     void addCallback (const Callback & cb)
