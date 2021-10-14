@@ -179,7 +179,7 @@ namespace n2k
      *
      * @return a long from the given set of bits
      */
-    unsigned long Get (int start, int len)
+    unsigned long Get (int start, int len) const
     {
       unsigned char startbit = start % 8;
       unsigned char startbyte = start / 8;

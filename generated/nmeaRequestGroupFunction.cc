@@ -8,12 +8,12 @@ namespace n2k {
   public:
     NmeaRequestGroupFunction() {};
     NmeaRequestGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() { return 1 * Get(0,8); };
-    double getPgn() { return 1 * Get(8,24); };
-    double getTransmissionInterval() { return 0.001 * Get(32,32); };
-    double getTransmissionIntervalOffset() { return 0.01 * Get(64,16); };
+    double getFunctionCode() const { return 1 * Get(0,8); };
+    double getPgn() const { return 1 * Get(8,24); };
+    double getTransmissionInterval() const { return 0.001 * Get(32,32); };
+    double getTransmissionIntervalOffset() const { return 0.01 * Get(64,16); };
     unsigned char getOfParameters() { return Get(80,8); };
-    double getParameter() { return 1 * Get(88,8); };
+    double getParameter() const { return 1 * Get(88,8); };
     unsigned char getValue() { return Get(96,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;

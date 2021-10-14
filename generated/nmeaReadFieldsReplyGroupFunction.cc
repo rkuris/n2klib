@@ -17,16 +17,16 @@ namespace n2k {
 
     NmeaReadFieldsReplyGroupFunction() {};
     NmeaReadFieldsReplyGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() { return 1 * Get(0,8); };
-    double getPgn() { return 1 * Get(8,24); };
+    double getFunctionCode() const { return 1 * Get(0,8); };
+    double getPgn() const { return 1 * Get(8,24); };
     unsigned short getManufacturerCode() { return Get(32,11); };
     IndustryCode getIndustryCode() { return (IndustryCode)Get(45,3); };
-    double getUniqueId() { return 1 * Get(48,8); };
+    double getUniqueId() const { return 1 * Get(48,8); };
     unsigned char getOfSelectionPairs() { return Get(56,8); };
     unsigned char getOfParameters() { return Get(64,8); };
-    double getSelectionParameter() { return 1 * Get(72,8); };
+    double getSelectionParameter() const { return 1 * Get(72,8); };
     unsigned char getSelectionValue() { return Get(80,0); };
-    double getParameter() { return 1 * Get(80,8); };
+    double getParameter() const { return 1 * Get(80,8); };
     unsigned char getValue() { return Get(88,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;

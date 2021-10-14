@@ -17,7 +17,7 @@ namespace n2k {
     IsoAcknowledgement(const Message &m) : Message(m) {};
     Control getControl() { return (Control)Get(0,8); };
     unsigned char getGroupFunction() { return Get(8,8); };
-    double getPgn() { return 1 * Get(40,24); };
+    double getPgn() const { return 1 * Get(40,24); };
     static const pgn_t PGN = 59392;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }

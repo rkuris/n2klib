@@ -36,8 +36,8 @@ namespace n2k {
 
     NmeaAcknowledgeGroupFunction() {};
     NmeaAcknowledgeGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() { return 1 * Get(0,8); };
-    double getPgn() { return 1 * Get(8,24); };
+    double getFunctionCode() const { return 1 * Get(0,8); };
+    double getPgn() const { return 1 * Get(8,24); };
     PgnErrorCode getPgnErrorCode() { return (PgnErrorCode)Get(32,4); };
     TransmissionIntervalPriorityErrorCode getTransmissionIntervalPriorityErrorCode() { return (TransmissionIntervalPriorityErrorCode)Get(36,4); };
     unsigned char getOfParameters() { return Get(40,8); };

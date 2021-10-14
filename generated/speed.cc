@@ -17,8 +17,8 @@ namespace n2k {
     Speed() {};
     Speed(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
-    double getSpeedWaterReferenced() { return 0.0194384 * Get(8,16); };
-    double getSpeedGroundReferenced() { return 0.0194384 * Get(24,16); };
+    double getSpeedWaterReferenced() const { return 0.0194384 * Get(8,16); };
+    double getSpeedGroundReferenced() const { return 0.0194384 * Get(24,16); };
     SpeedWaterReferencedType getSpeedWaterReferencedType() { return (SpeedWaterReferencedType)Get(40,8); };
     unsigned char getSpeedDirection() { return Get(48,4); };
     static const pgn_t PGN = 128259;

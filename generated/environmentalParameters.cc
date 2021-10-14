@@ -34,8 +34,8 @@ namespace n2k {
     unsigned char getSid() { return Get(0,8); };
     TemperatureSource getTemperatureSource() { return (TemperatureSource)Get(8,6); };
     HumiditySource getHumiditySource() { return (HumiditySource)Get(14,2); };
-    double getTemperature() { return 0.01 * Get(16,16); };
-    double getHumidity() { return 0.004 * Get(32,16); };
+    double getTemperature() const { return 0.01 * Get(16,16); };
+    double getHumidity() const { return 0.004 * Get(32,16); };
     unsigned short getAtmosphericPressure() { return Get(48,16); };
     static const pgn_t PGN = 130311;
     static const PGNType Type = PGNType::Single;

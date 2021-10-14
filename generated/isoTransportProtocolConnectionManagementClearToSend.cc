@@ -11,7 +11,7 @@ namespace n2k {
     unsigned char getGroupFunctionCode() { return Get(0,8); };
     unsigned char getMaxPackets() { return Get(8,8); };
     unsigned char getNextSid() { return Get(16,8); };
-    double getPgn() { return 1 * Get(40,24); };
+    double getPgn() const { return 1 * Get(40,24); };
     static const pgn_t PGN = 60416;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }

@@ -29,8 +29,8 @@ namespace n2k {
     unsigned char getSid() { return Get(0,8); };
     unsigned char getInstance() { return Get(8,8); };
     Source getSource() { return (Source)Get(16,8); };
-    double getTemperature() { return 0.001 * Get(24,24); };
-    double getSetTemperature() { return 0.1 * Get(48,16); };
+    double getTemperature() const { return 0.001 * Get(24,24); };
+    double getSetTemperature() const { return 0.1 * Get(48,16); };
     static const pgn_t PGN = 130316;
     static const PGNType Type = PGNType::Single;
     pgn_t getPGN() { return PGN; }

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 }
 void handleWind(const n2k::Message & m)
 {
-    n2k::WindData w(m);
+    const n2k::WindData &w = static_cast<const n2k::WindData&>(m);
     *out << "update foo.rrd N:" << std::setprecision(2) <<
         w.getWindSpeed() << ":" << w.getWindAngle() << "\n";
 }

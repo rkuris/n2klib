@@ -13,11 +13,11 @@ namespace n2k {
 
     NmeaCommandGroupFunction() {};
     NmeaCommandGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() { return 1 * Get(0,8); };
-    double getPgn() { return 1 * Get(8,24); };
+    double getFunctionCode() const { return 1 * Get(0,8); };
+    double getPgn() const { return 1 * Get(8,24); };
     Priority getPriority() { return (Priority)Get(32,4); };
     unsigned char getOfParameters() { return Get(40,8); };
-    double getParameter() { return 1 * Get(48,8); };
+    double getParameter() const { return 1 * Get(48,8); };
     unsigned char getValue() { return Get(56,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;

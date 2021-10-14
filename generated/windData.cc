@@ -17,8 +17,8 @@ namespace n2k {
     WindData() {};
     WindData(const Message &m) : Message(m) {};
     unsigned char getSid() { return Get(0,8); };
-    double getWindSpeed() { return 0.0194384 * Get(8,16); };
-    double getWindAngle() { return 0.00572958 * Get(24,16); };
+    double getWindSpeed() const { return 0.0194384 * Get(8,16); };
+    double getWindAngle() const { return 0.00572958 * Get(24,16); };
     Reference getReference() { return (Reference)Get(40,3); };
     static const pgn_t PGN = 130306;
     static const PGNType Type = PGNType::Single;

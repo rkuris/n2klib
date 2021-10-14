@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 		char dbl[32];
 		std::snprintf(dbl, sizeof(dbl), "%G", factor * resDouble);
 			
-			return "double get" + id + "() { return " + dbl + " * " + getter + "; }";
+			return "double get" + id + "() const { return " + dbl + " * " + getter + "; }";
 	    }
 	    string type;
 	    string cast = "";

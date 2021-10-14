@@ -29,8 +29,8 @@ namespace n2k {
 
     Heartbeat() {};
     Heartbeat(const Message &m) : Message(m) {};
-    double getDataTransmitOffset() { return 0.001 * Get(0,16); };
-    double getSequenceCounter() { return 1 * Get(16,8); };
+    double getDataTransmitOffset() const { return 0.001 * Get(0,16); };
+    double getSequenceCounter() const { return 1 * Get(16,8); };
     Controller1State getController1State() { return (Controller1State)Get(24,2); };
     Controller2State getController2State() { return (Controller2State)Get(26,2); };
     EquipmentStatus getEquipmentStatus() { return (EquipmentStatus)Get(28,2); };
