@@ -17,19 +17,30 @@ namespace n2k {
 
     NmeaWriteFieldsReplyGroupFunction() {};
     NmeaWriteFieldsReplyGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() const { return 1 * Get(0,8); };
-    double getPgn() const { return 1 * Get(8,24); };
-    unsigned short getManufacturerCode() { return Get(32,11); };
-    IndustryCode getIndustryCode() { return (IndustryCode)Get(45,3); };
-    double getUniqueId() const { return 1 * Get(48,8); };
-    unsigned char getOfSelectionPairs() { return Get(56,8); };
-    unsigned char getOfParameters() { return Get(64,8); };
-    double getSelectionParameter() const { return 1 * Get(72,8); };
-    unsigned char getSelectionValue() { return Get(80,0); };
-    double getParameter() const { return 1 * Get(80,8); };
-    unsigned char getValue() { return Get(88,0); };
+    void setFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getFunctionCode() const { return Get(0,8); };
+    void setPgn(unsigned long value) { Set(value,8,24); }
+    unsigned long getPgn() const { return Get(8,24); };
+    void setManufacturerCode(unsigned short value) { Set(value,32,11); }
+    unsigned short getManufacturerCode() const { return Get(32,11); };
+    void setIndustryCode(IndustryCode value) { Set((unsigned char)value,45,3); }
+    IndustryCode getIndustryCode() const { return (IndustryCode)Get(45,3); };
+    void setUniqueId(unsigned char value) { Set(value,48,8); }
+    unsigned char getUniqueId() const { return Get(48,8); };
+    void setOfSelectionPairs(unsigned char value) { Set(value,56,8); }
+    unsigned char getOfSelectionPairs() const { return Get(56,8); };
+    void setOfParameters(unsigned char value) { Set(value,64,8); }
+    unsigned char getOfParameters() const { return Get(64,8); };
+    void setSelectionParameter(unsigned char value) { Set(value,72,8); }
+    unsigned char getSelectionParameter() const { return Get(72,8); };
+    void setSelectionValue(unsigned char value) { Set(value,80,0); }
+    unsigned char getSelectionValue() const { return Get(80,0); };
+    void setParameter(unsigned char value) { Set(value,80,8); }
+    unsigned char getParameter() const { return Get(80,8); };
+    void setValue(unsigned char value) { Set(value,88,0); }
+    unsigned char getValue() const { return Get(88,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

@@ -31,14 +31,20 @@ namespace n2k {
 
     EnvironmentalParameters() {};
     EnvironmentalParameters(const Message &m) : Message(m) {};
-    unsigned char getSid() { return Get(0,8); };
-    TemperatureSource getTemperatureSource() { return (TemperatureSource)Get(8,6); };
-    HumiditySource getHumiditySource() { return (HumiditySource)Get(14,2); };
+    void setSid(unsigned char value) { Set(value,0,8); }
+    unsigned char getSid() const { return Get(0,8); };
+    void setTemperatureSource(TemperatureSource value) { Set((unsigned char)value,8,6); }
+    TemperatureSource getTemperatureSource() const { return (TemperatureSource)Get(8,6); };
+    void setHumiditySource(HumiditySource value) { Set((unsigned char)value,14,2); }
+    HumiditySource getHumiditySource() const { return (HumiditySource)Get(14,2); };
+    void setTemperature(double value) { Set(value/0.01,16,16); }
     double getTemperature() const { return 0.01 * Get(16,16); };
+    void setHumidity(double value) { Set(value/0.004,32,16); }
     double getHumidity() const { return 0.004 * Get(32,16); };
-    unsigned short getAtmosphericPressure() { return Get(48,16); };
+    void setAtmosphericPressure(unsigned short value) { Set(value,48,16); }
+    unsigned short getAtmosphericPressure() const { return Get(48,16); };
     static const pgn_t PGN = 130311;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

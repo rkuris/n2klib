@@ -8,12 +8,16 @@ namespace n2k {
   public:
     IsoTransportProtocolConnectionManagementClearToSend() {};
     IsoTransportProtocolConnectionManagementClearToSend(const Message &m) : Message(m) {};
-    unsigned char getGroupFunctionCode() { return Get(0,8); };
-    unsigned char getMaxPackets() { return Get(8,8); };
-    unsigned char getNextSid() { return Get(16,8); };
-    double getPgn() const { return 1 * Get(40,24); };
+    void setGroupFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getGroupFunctionCode() const { return Get(0,8); };
+    void setMaxPackets(unsigned char value) { Set(value,8,8); }
+    unsigned char getMaxPackets() const { return Get(8,8); };
+    void setNextSid(unsigned char value) { Set(value,16,8); }
+    unsigned char getNextSid() const { return Get(16,8); };
+    void setPgn(unsigned long value) { Set(value,40,24); }
+    unsigned long getPgn() const { return Get(40,24); };
     static const pgn_t PGN = 60416;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

@@ -26,13 +26,18 @@ namespace n2k {
 
     Temperature() {};
     Temperature(const Message &m) : Message(m) {};
-    unsigned char getSid() { return Get(0,8); };
-    unsigned char getInstance() { return Get(8,8); };
-    Source getSource() { return (Source)Get(16,8); };
+    void setSid(unsigned char value) { Set(value,0,8); }
+    unsigned char getSid() const { return Get(0,8); };
+    void setInstance(unsigned char value) { Set(value,8,8); }
+    unsigned char getInstance() const { return Get(8,8); };
+    void setSource(Source value) { Set((unsigned char)value,16,8); }
+    Source getSource() const { return (Source)Get(16,8); };
+    void setActualTemperature(double value) { Set(value/0.01,24,16); }
     double getActualTemperature() const { return 0.01 * Get(24,16); };
+    void setSetTemperature(double value) { Set(value/0.01,40,16); }
     double getSetTemperature() const { return 0.01 * Get(40,16); };
     static const pgn_t PGN = 130312;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

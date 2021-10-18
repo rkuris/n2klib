@@ -8,15 +8,22 @@ namespace n2k {
   public:
     NmeaRequestGroupFunction() {};
     NmeaRequestGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() const { return 1 * Get(0,8); };
-    double getPgn() const { return 1 * Get(8,24); };
+    void setFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getFunctionCode() const { return Get(0,8); };
+    void setPgn(unsigned long value) { Set(value,8,24); }
+    unsigned long getPgn() const { return Get(8,24); };
+    void setTransmissionInterval(double value) { Set(value/0.001,32,32); }
     double getTransmissionInterval() const { return 0.001 * Get(32,32); };
+    void setTransmissionIntervalOffset(double value) { Set(value/0.01,64,16); }
     double getTransmissionIntervalOffset() const { return 0.01 * Get(64,16); };
-    unsigned char getOfParameters() { return Get(80,8); };
-    double getParameter() const { return 1 * Get(88,8); };
-    unsigned char getValue() { return Get(96,0); };
+    void setOfParameters(unsigned char value) { Set(value,80,8); }
+    unsigned char getOfParameters() const { return Get(80,8); };
+    void setParameter(unsigned char value) { Set(value,88,8); }
+    unsigned char getParameter() const { return Get(88,8); };
+    void setValue(unsigned char value) { Set(value,96,0); }
+    unsigned char getValue() const { return Get(96,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

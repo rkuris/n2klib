@@ -8,9 +8,10 @@ namespace n2k {
   public:
     IsoRequest() {};
     IsoRequest(const Message &m) : Message(m) {};
-    double getPgn() const { return 1 * Get(0,24); };
+    void setPgn(unsigned long value) { Set(value,0,24); }
+    unsigned long getPgn() const { return Get(0,24); };
     static const pgn_t PGN = 59904;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

@@ -8,11 +8,14 @@ namespace n2k {
   public:
     IsoTransportProtocolConnectionManagementAbort() {};
     IsoTransportProtocolConnectionManagementAbort(const Message &m) : Message(m) {};
-    unsigned char getGroupFunctionCode() { return Get(0,8); };
-    unsigned char getReason() { return Get(8,8); };
-    double getPgn() const { return 1 * Get(32,24); };
+    void setGroupFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getGroupFunctionCode() const { return Get(0,8); };
+    void setReason(unsigned char value) { Set(value,8,8); }
+    unsigned char getReason() const { return Get(8,8); };
+    void setPgn(unsigned long value) { Set(value,32,24); }
+    unsigned long getPgn() const { return Get(32,24); };
     static const pgn_t PGN = 60416;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

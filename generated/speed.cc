@@ -16,13 +16,18 @@ namespace n2k {
 
     Speed() {};
     Speed(const Message &m) : Message(m) {};
-    unsigned char getSid() { return Get(0,8); };
+    void setSid(unsigned char value) { Set(value,0,8); }
+    unsigned char getSid() const { return Get(0,8); };
+    void setSpeedWaterReferenced(double value) { Set(value/0.0194384,8,16); }
     double getSpeedWaterReferenced() const { return 0.0194384 * Get(8,16); };
+    void setSpeedGroundReferenced(double value) { Set(value/0.0194384,24,16); }
     double getSpeedGroundReferenced() const { return 0.0194384 * Get(24,16); };
-    SpeedWaterReferencedType getSpeedWaterReferencedType() { return (SpeedWaterReferencedType)Get(40,8); };
-    unsigned char getSpeedDirection() { return Get(48,4); };
+    void setSpeedWaterReferencedType(SpeedWaterReferencedType value) { Set((unsigned char)value,40,8); }
+    SpeedWaterReferencedType getSpeedWaterReferencedType() const { return (SpeedWaterReferencedType)Get(40,8); };
+    void setSpeedDirection(unsigned char value) { Set(value,48,4); }
+    unsigned char getSpeedDirection() const { return Get(48,4); };
     static const pgn_t PGN = 128259;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

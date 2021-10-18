@@ -23,6 +23,9 @@ namespace n2k
   // Only certain PGNs have a destination
   const addr_t CAN_BROADCAST_ADDR = 0xff;
   const canid_t EFF_FRAME = 0x80000000U;
+  inline bool pgnIsAlwaysBroadcast(pgn_t pgn) {
+	  return pgn < 65536;
+  }
 
 
   /*! PGNType is either SINGLE_PACKET or FAST_PACKET
@@ -47,7 +50,15 @@ namespace n2k
     static const int MAX_CAN_DATA = 8;
 
     Packet() : canid{0} {}
-    Packet(canid_t canid_, unsigned char *data_) : canid{canid_} {
+    Packet(unsigned char *data_) : canid{0} {
+	    memcpy(data, data_, MAX_CAN_DATA);
+    }
+    Packet(pgn_t pgn, prio_t priority, addr_t source, unsigned char *data_) : canid{0} {
+	    setPGN(pgn);
+	    setPriority(priority);
+	    if (!pgnIsAlwaysBroadcast(pgn)) {
+		    setSource(source);
+	    }
 	    memcpy(data, data_, MAX_CAN_DATA);
     }
 
@@ -164,14 +175,42 @@ namespace n2k
   {
   public:
     static const int MAX_NMEA_DATA = 223;
-    pgn_t pgn;
     unsigned char data[MAX_NMEA_DATA];
 
-    virtual pgn_t getPGN ()
-    {
-      return 0;
-    }
+    virtual pgn_t getPGN () const = 0;
 
+    /** Set some bits in the data array
+     *
+     * @param value [in] the value to store
+     * @param start [in] the starting bit where the data begins
+     * @param len   [in] the length, in bits, of the data
+     *
+     */
+    template <class T>
+    void Set (T value, int start, int len)
+    {
+      unsigned char startbit = start % 8;
+      unsigned char startbyte = start / 8;
+      if (startbit == 0)
+	{
+	  switch (len)
+	    {
+	    case 8:
+	      data[startbyte] = (unsigned char)value;
+	      return;
+	    case 16:
+	      intmem::storeu_le<uint16_t>(data + startbyte, value);
+	      return;
+	    case 32:
+	      intmem::storeu_le<uint32_t>(data + startbyte, value);
+	      return;
+	    case 64:
+	      intmem::storeu_le<uint64_t>(data + startbyte, value);
+	      return;
+	    }
+	}
+      abort(); // FIXME TODO
+    }
     /** Get some bits from the data array into a long
      *
      * @param start [in] the starting bit where the data begins
@@ -241,6 +280,7 @@ namespace n2k
       m_last:5;			/* last packet sequence */
     pgn_t m_pgn;
     unsigned char m_age;
+    virtual pgn_t getPGN () const { return m_pgn; }
   };
 
   /*! \brief Contains a set of Messages and states
@@ -304,6 +344,7 @@ namespace n2k
 	    // simple case, we always get a packet
 	    MessageWithState & m = getFree ();
 	    std::memcpy(m.data, packet.data, sizeof(packet.data));
+	    m.m_pgn = packet.getPGN();
 	    return &m;
 	  }
 

@@ -37,16 +37,24 @@ namespace n2k {
 
     IsoAddressClaim() {};
     IsoAddressClaim(const Message &m) : Message(m) {};
-    unsigned long getUniqueNumber() { return Get(0,21); };
-    unsigned short getManufacturerCode() { return Get(21,11); };
-    unsigned char getDeviceInstanceLower() { return Get(32,3); };
-    unsigned char getDeviceInstanceUpper() { return Get(35,5); };
-    unsigned char getDeviceFunction() { return Get(40,8); };
-    DeviceClass getDeviceClass() { return (DeviceClass)Get(49,7); };
-    unsigned char getSystemInstance() { return Get(56,4); };
-    IndustryGroup getIndustryGroup() { return (IndustryGroup)Get(60,3); };
+    void setUniqueNumber(unsigned long value) { Set(value,0,21); }
+    unsigned long getUniqueNumber() const { return Get(0,21); };
+    void setManufacturerCode(unsigned short value) { Set(value,21,11); }
+    unsigned short getManufacturerCode() const { return Get(21,11); };
+    void setDeviceInstanceLower(unsigned char value) { Set(value,32,3); }
+    unsigned char getDeviceInstanceLower() const { return Get(32,3); };
+    void setDeviceInstanceUpper(unsigned char value) { Set(value,35,5); }
+    unsigned char getDeviceInstanceUpper() const { return Get(35,5); };
+    void setDeviceFunction(unsigned char value) { Set(value,40,8); }
+    unsigned char getDeviceFunction() const { return Get(40,8); };
+    void setDeviceClass(DeviceClass value) { Set((unsigned char)value,49,7); }
+    DeviceClass getDeviceClass() const { return (DeviceClass)Get(49,7); };
+    void setSystemInstance(unsigned char value) { Set(value,56,4); }
+    unsigned char getSystemInstance() const { return Get(56,4); };
+    void setIndustryGroup(IndustryGroup value) { Set((unsigned char)value,60,3); }
+    IndustryGroup getIndustryGroup() const { return (IndustryGroup)Get(60,3); };
     static const pgn_t PGN = 60928;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

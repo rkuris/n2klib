@@ -8,12 +8,16 @@ namespace n2k {
   public:
     IsoTransportProtocolConnectionManagementEndOfMessage() {};
     IsoTransportProtocolConnectionManagementEndOfMessage(const Message &m) : Message(m) {};
-    unsigned char getGroupFunctionCode() { return Get(0,8); };
-    unsigned short getTotalMessageSize() { return Get(8,16); };
-    unsigned char getTotalNumberOfPacketsReceived() { return Get(24,8); };
-    double getPgn() const { return 1 * Get(40,24); };
+    void setGroupFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getGroupFunctionCode() const { return Get(0,8); };
+    void setTotalMessageSize(unsigned short value) { Set(value,8,16); }
+    unsigned short getTotalMessageSize() const { return Get(8,16); };
+    void setTotalNumberOfPacketsReceived(unsigned char value) { Set(value,24,8); }
+    unsigned char getTotalNumberOfPacketsReceived() const { return Get(24,8); };
+    void setPgn(unsigned long value) { Set(value,40,24); }
+    unsigned long getPgn() const { return Get(40,24); };
     static const pgn_t PGN = 60416;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

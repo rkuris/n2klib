@@ -15,11 +15,14 @@ namespace n2k {
 
     IsoAcknowledgement() {};
     IsoAcknowledgement(const Message &m) : Message(m) {};
-    Control getControl() { return (Control)Get(0,8); };
-    unsigned char getGroupFunction() { return Get(8,8); };
-    double getPgn() const { return 1 * Get(40,24); };
+    void setControl(Control value) { Set((unsigned char)value,0,8); }
+    Control getControl() const { return (Control)Get(0,8); };
+    void setGroupFunction(unsigned char value) { Set(value,8,8); }
+    unsigned char getGroupFunction() const { return Get(8,8); };
+    void setPgn(unsigned long value) { Set(value,40,24); }
+    unsigned long getPgn() const { return Get(40,24); };
     static const pgn_t PGN = 59392;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

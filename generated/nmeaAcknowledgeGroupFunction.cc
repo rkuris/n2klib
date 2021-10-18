@@ -36,14 +36,20 @@ namespace n2k {
 
     NmeaAcknowledgeGroupFunction() {};
     NmeaAcknowledgeGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() const { return 1 * Get(0,8); };
-    double getPgn() const { return 1 * Get(8,24); };
-    PgnErrorCode getPgnErrorCode() { return (PgnErrorCode)Get(32,4); };
-    TransmissionIntervalPriorityErrorCode getTransmissionIntervalPriorityErrorCode() { return (TransmissionIntervalPriorityErrorCode)Get(36,4); };
-    unsigned char getOfParameters() { return Get(40,8); };
-    Parameter getParameter() { return (Parameter)Get(48,4); };
+    void setFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getFunctionCode() const { return Get(0,8); };
+    void setPgn(unsigned long value) { Set(value,8,24); }
+    unsigned long getPgn() const { return Get(8,24); };
+    void setPgnErrorCode(PgnErrorCode value) { Set((unsigned char)value,32,4); }
+    PgnErrorCode getPgnErrorCode() const { return (PgnErrorCode)Get(32,4); };
+    void setTransmissionIntervalPriorityErrorCode(TransmissionIntervalPriorityErrorCode value) { Set((unsigned char)value,36,4); }
+    TransmissionIntervalPriorityErrorCode getTransmissionIntervalPriorityErrorCode() const { return (TransmissionIntervalPriorityErrorCode)Get(36,4); };
+    void setOfParameters(unsigned char value) { Set(value,40,8); }
+    unsigned char getOfParameters() const { return Get(40,8); };
+    void setParameter(Parameter value) { Set((unsigned char)value,48,4); }
+    Parameter getParameter() const { return (Parameter)Get(48,4); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

@@ -8,10 +8,12 @@ namespace n2k {
   public:
     IsoTransportProtocolDataTransfer() {};
     IsoTransportProtocolDataTransfer(const Message &m) : Message(m) {};
-    unsigned char getSid() { return Get(0,8); };
-     getData() { return Get(8,56); };
+    void setSid(unsigned char value) { Set(value,0,8); }
+    unsigned char getSid() const { return Get(0,8); };
+    void setData( value) { Set(value,8,56); }
+     getData() const { return Get(8,56); };
     static const pgn_t PGN = 60160;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

@@ -16,12 +16,16 @@ namespace n2k {
 
     WindData() {};
     WindData(const Message &m) : Message(m) {};
-    unsigned char getSid() { return Get(0,8); };
+    void setSid(unsigned char value) { Set(value,0,8); }
+    unsigned char getSid() const { return Get(0,8); };
+    void setWindSpeed(double value) { Set(value/0.0194384,8,16); }
     double getWindSpeed() const { return 0.0194384 * Get(8,16); };
+    void setWindAngle(double value) { Set(value/0.00572958,24,16); }
     double getWindAngle() const { return 0.00572958 * Get(24,16); };
-    Reference getReference() { return (Reference)Get(40,3); };
+    void setReference(Reference value) { Set((unsigned char)value,40,3); }
+    Reference getReference() const { return (Reference)Get(40,3); };
     static const pgn_t PGN = 130306;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

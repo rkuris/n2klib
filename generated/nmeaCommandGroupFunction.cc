@@ -13,14 +13,20 @@ namespace n2k {
 
     NmeaCommandGroupFunction() {};
     NmeaCommandGroupFunction(const Message &m) : Message(m) {};
-    double getFunctionCode() const { return 1 * Get(0,8); };
-    double getPgn() const { return 1 * Get(8,24); };
-    Priority getPriority() { return (Priority)Get(32,4); };
-    unsigned char getOfParameters() { return Get(40,8); };
-    double getParameter() const { return 1 * Get(48,8); };
-    unsigned char getValue() { return Get(56,0); };
+    void setFunctionCode(unsigned char value) { Set(value,0,8); }
+    unsigned char getFunctionCode() const { return Get(0,8); };
+    void setPgn(unsigned long value) { Set(value,8,24); }
+    unsigned long getPgn() const { return Get(8,24); };
+    void setPriority(Priority value) { Set((unsigned char)value,32,4); }
+    Priority getPriority() const { return (Priority)Get(32,4); };
+    void setOfParameters(unsigned char value) { Set(value,40,8); }
+    unsigned char getOfParameters() const { return Get(40,8); };
+    void setParameter(unsigned char value) { Set(value,48,8); }
+    unsigned char getParameter() const { return Get(48,8); };
+    void setValue(unsigned char value) { Set(value,56,0); }
+    unsigned char getValue() const { return Get(56,0); };
     static const pgn_t PGN = 126208;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

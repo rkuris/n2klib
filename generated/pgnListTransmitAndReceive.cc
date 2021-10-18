@@ -13,10 +13,12 @@ namespace n2k {
 
     PgnListTransmitAndReceive() {};
     PgnListTransmitAndReceive(const Message &m) : Message(m) {};
-    FunctionCode getFunctionCode() { return (FunctionCode)Get(0,8); };
-    double getPgn() const { return 1 * Get(8,24); };
+    void setFunctionCode(FunctionCode value) { Set((unsigned char)value,0,8); }
+    FunctionCode getFunctionCode() const { return (FunctionCode)Get(0,8); };
+    void setPgn(unsigned long value) { Set(value,8,24); }
+    unsigned long getPgn() const { return Get(8,24); };
     static const pgn_t PGN = 126464;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

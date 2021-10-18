@@ -43,24 +43,42 @@ namespace n2k {
 ## if isArray(Fields)
 ##  for field in Fields
 ##   if field.Id != "reserved"
-    {{ funcfor(field) }};
+    {{ getter(field) }};
 ##   endif
 ##  endfor
 ## else
-    {{ funcfor(Fields.Field) }};
+    {{ getter(Fields.Field) }};
 ## endif
     static const pgn_t PGN = {{ PGN }};
     static const PGNType Type = PGNType::{{ Type }};
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }
 )TEMPLATE";
+
+class FieldData {
+	public:
+	int offset;
+	int length;
+	string id;
+	double factor;
+
+	FieldData(const json *field) {
+	    length = field->at("BitLength").get<int>();
+	    offset = -1;
+	    if (field->contains("BitOffset")) {
+		offset = field->at("BitOffset").get<int>();
+	    }
+	    id = field->at("Id").get<string>();
+	}
+};
 
 int main(int argc, char *argv[]) {
     // Parse the pgns.json file
     json j;
     ifstream pgnfile("pgns.json");
     pgnfile >> j;
+    std::map<string, int> seenFields;
 
     mkdir("generated", 0777);
     int needed[] = { 
@@ -79,6 +97,7 @@ int main(int argc, char *argv[]) {
 		     // user (these should be in argv)
 
 		     128259, /* speed through water */
+		     129038, /* AIS type A position report */
 		     129039, /* AIS type B position report */
 		     130306, /* environmental parameters */
 		     130310, /* environmental parameters */
@@ -96,17 +115,21 @@ int main(int argc, char *argv[]) {
        id[0] = toupper(id[0]);
        return id;
     });
-    env.add_callback("funcfor", 1, [](Arguments& args) {
+    env.add_callback("getter", 1, [&seenFields](Arguments& args) {
+	    FieldData f(args.at(0));
+
 	    auto field = args.at(0);
-	    int len = field->at("BitLength").get<int>();
-	    int off = -1;
-	    if (field->contains("BitOffset")) {
-	        off = field->at("BitOffset").get<int>();
-	    }
-	    string id = field->at("Id").get<string>();
-	    id[0] = toupper(id[0]);
-	    string getter = "Get(" + to_string(off) + "," + to_string(len) + ")";
-	    if (field->contains("Resolution")) {
+	    auto seen = seenFields.find(f.id);
+	    auto sofar = 1;
+	    if (seen != seenFields.end()) {
+	       f.id += "_" + to_string(seen->second);
+	       sofar = seen->second + 1;
+            }
+            seenFields[f.id] = sofar;
+	    f.id[0] = toupper(f.id[0]);
+	    string getterArgs = to_string(f.offset) + "," + to_string(f.length);
+	    string getter = "Get(" + getterArgs + ")";
+	    if (field->contains("Resolution") && (!field->contains("Type")||field->at("Type")!="Integer")) {
 	        auto factor = 1.0;
 	        auto res = field->at("Resolution");
 		if (field->contains("Units")) {
@@ -120,23 +143,26 @@ int main(int argc, char *argv[]) {
 		auto resDouble = res.get<double>();
 		char dbl[32];
 		std::snprintf(dbl, sizeof(dbl), "%G", factor * resDouble);
-			
-			return "double get" + id + "() const { return " + dbl + " * " + getter + "; }";
+		string setter = "void set" + f.id + "(double value) { Set(value/" + dbl + "," + getterArgs + "); }\n    ";
+		return setter + "double get" + f.id + "() const { return " + dbl + " * " + getter + "; }";
 	    }
 	    string type;
 	    string cast = "";
+	    string reverseCast = "";
 	    if (field->contains("EnumValues")) {
-		type = id;
+		type = f.id;
 		cast = "(" + type + ")";
-	    } else if (len <= 8)
+		reverseCast = "(unsigned char)";
+	    } else if (f.length <= 8)
 		type = "unsigned char";
-	    else if (len <=16)
+	    else if (f.length <=16)
 		type ="unsigned short";
-	    else if (len < 32)
+	    else if (f.length <= 32)
 		    type = "unsigned long";
 	    else
 		type = "";
-	    return string(type + " get" + id + "() { return " + cast + getter + "; }");
+	    string setter = "void set" + f.id + "(" + type + " value) { Set(" + reverseCast + "value," + getterArgs + "); }\n    ";
+	    return string(setter + type + " get" + f.id + "() const { return " + cast + getter + "; }");
     });
     env.add_callback("enumname", 1, [](Arguments& args) {
 	    regex e ("[^A-Za-z0-9]+");
@@ -148,6 +174,7 @@ int main(int argc, char *argv[]) {
 	    auto pgnid = (*it)["PGN"].get<int>();
 	    cout << "Processing PGN " << pgnid << "\n";
 	    if (binary_search(needed, needed + sizeof(needed) / sizeof(int), pgnid)) {
+		    seenFields.clear();
 		    string classname = (*it)["Id"].get<string>();
 		    string filename = "generated/" + classname + ".cc";
 		    ofstream classfile(filename);

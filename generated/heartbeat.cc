@@ -29,13 +29,18 @@ namespace n2k {
 
     Heartbeat() {};
     Heartbeat(const Message &m) : Message(m) {};
+    void setDataTransmitOffset(double value) { Set(value/0.001,0,16); }
     double getDataTransmitOffset() const { return 0.001 * Get(0,16); };
-    double getSequenceCounter() const { return 1 * Get(16,8); };
-    Controller1State getController1State() { return (Controller1State)Get(24,2); };
-    Controller2State getController2State() { return (Controller2State)Get(26,2); };
-    EquipmentStatus getEquipmentStatus() { return (EquipmentStatus)Get(28,2); };
+    void setSequenceCounter(unsigned char value) { Set(value,16,8); }
+    unsigned char getSequenceCounter() const { return Get(16,8); };
+    void setController1State(Controller1State value) { Set((unsigned char)value,24,2); }
+    Controller1State getController1State() const { return (Controller1State)Get(24,2); };
+    void setController2State(Controller2State value) { Set((unsigned char)value,26,2); }
+    Controller2State getController2State() const { return (Controller2State)Get(26,2); };
+    void setEquipmentStatus(EquipmentStatus value) { Set((unsigned char)value,28,2); }
+    EquipmentStatus getEquipmentStatus() const { return (EquipmentStatus)Get(28,2); };
     static const pgn_t PGN = 126993;
     static const PGNType Type = PGNType::Single;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }

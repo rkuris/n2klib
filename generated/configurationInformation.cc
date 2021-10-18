@@ -8,11 +8,14 @@ namespace n2k {
   public:
     ConfigurationInformation() {};
     ConfigurationInformation(const Message &m) : Message(m) {};
-    unsigned short getInstallationDescription1() { return Get(0,16); };
-    unsigned short getInstallationDescription2() { return Get(-1,16); };
-    unsigned short getManufacturerInformation() { return Get(-1,16); };
+    void setInstallationDescription1(unsigned short value) { Set(value,0,16); }
+    unsigned short getInstallationDescription1() const { return Get(0,16); };
+    void setInstallationDescription2(unsigned short value) { Set(value,-1,16); }
+    unsigned short getInstallationDescription2() const { return Get(-1,16); };
+    void setManufacturerInformation(unsigned short value) { Set(value,-1,16); }
+    unsigned short getManufacturerInformation() const { return Get(-1,16); };
     static const pgn_t PGN = 126998;
     static const PGNType Type = PGNType::Fast;
-    pgn_t getPGN() { return PGN; }
+    pgn_t getPGN() const { return PGN; }
   };
 }
