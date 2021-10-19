@@ -10,6 +10,8 @@
         } \
     } while (false)
 
+void bitUnpacker();
+
 void bitUnpacker() {
     struct tc {
         unsigned char data[n2k::Message::MAX_NMEA_DATA];
@@ -29,7 +31,7 @@ void bitUnpacker() {
 
     for ( unsigned int i = 0; i < sizeof(testcases)/sizeof(testcases[0]); i++) {
         tc testcase = testcases[i];
-        n2k::Message m;
+        n2k::MessageWithState m;
         memcpy(m.data, testcase.data, sizeof(testcase.data));
         auto got = m.Get(testcase.start, testcase.len);
         ASSERT(got == testcase.expected,
