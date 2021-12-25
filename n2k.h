@@ -11,6 +11,7 @@
 #include <functional>
 #include <vector>
 #include <cstring>
+#include "stdlib.h"
 
 #include "./intmem/intmem.h"
 

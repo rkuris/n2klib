@@ -75,8 +75,14 @@ class FieldData {
 
 int main(int argc, char *argv[]) {
     // Parse the pgns.json file
+	const std::string filename = "pgns.json";
     json j;
-    ifstream pgnfile("pgns.json");
+    ifstream pgnfile(filename);
+	if (pgnfile.fail()) {
+		cerr << "Cannot open '" << filename << "': " << strerror(errno) << "\n";
+		cerr << "Run make pgns.json to (re)create pgns.json\n";
+		exit(1);
+	}
     pgnfile >> j;
     std::map<string, int> seenFields;
 
