@@ -18,10 +18,14 @@ namespace n2k {
     WindData(const Message &m) : Message(m) {};
     void setSid(unsigned char value) { Set(value,0,8); }
     unsigned char getSid() const { return Get(0,8); };
-    void setWindSpeed(double value) { Set(value/0.0194384,8,16); }
-    double getWindSpeed() const { return 0.0194384 * Get(8,16); };
-    void setWindAngle(double value) { Set(value/0.00572958,24,16); }
-    double getWindAngle() const { return 0.00572958 * Get(24,16); };
+    void setWindSpeedMetersPerSecond(double value) { Set(value/0.01,8,16); }
+    double getWindSpeedMetersPerSecond() const { return 0.01 * Get(8,16); }
+    void setWindSpeedKnots(double value) { Set(value/0.0194384,8,16); }
+    double getWindSpeedKnots() const { return 0.0194384 * Get(8,16); };
+    void setWindAngleRadians(double value) { Set(value/0.0001,24,16); }
+    double getWindAngleRadians() const { return 0.0001 * Get(24,16); }
+    void setWindAngleDegrees(double value) { Set(value/0.00572958,24,16); }
+    double getWindAngleDegrees() const { return 0.00572958 * Get(24,16); };
     void setReference(Reference value) { Set((unsigned char)value,40,3); }
     Reference getReference() const { return (Reference)Get(40,3); };
     static const pgn_t PGN = 130306;

@@ -18,10 +18,14 @@ namespace n2k {
     Speed(const Message &m) : Message(m) {};
     void setSid(unsigned char value) { Set(value,0,8); }
     unsigned char getSid() const { return Get(0,8); };
-    void setSpeedWaterReferenced(double value) { Set(value/0.0194384,8,16); }
-    double getSpeedWaterReferenced() const { return 0.0194384 * Get(8,16); };
-    void setSpeedGroundReferenced(double value) { Set(value/0.0194384,24,16); }
-    double getSpeedGroundReferenced() const { return 0.0194384 * Get(24,16); };
+    void setSpeedWaterReferencedMetersPerSecond(double value) { Set(value/0.01,8,16); }
+    double getSpeedWaterReferencedMetersPerSecond() const { return 0.01 * Get(8,16); }
+    void setSpeedWaterReferencedKnots(double value) { Set(value/0.0194384,8,16); }
+    double getSpeedWaterReferencedKnots() const { return 0.0194384 * Get(8,16); };
+    void setSpeedGroundReferencedMetersPerSecond(double value) { Set(value/0.01,24,16); }
+    double getSpeedGroundReferencedMetersPerSecond() const { return 0.01 * Get(24,16); }
+    void setSpeedGroundReferencedKnots(double value) { Set(value/0.0194384,24,16); }
+    double getSpeedGroundReferencedKnots() const { return 0.0194384 * Get(24,16); };
     void setSpeedWaterReferencedType(SpeedWaterReferencedType value) { Set((unsigned char)value,40,8); }
     SpeedWaterReferencedType getSpeedWaterReferencedType() const { return (SpeedWaterReferencedType)Get(40,8); };
     void setSpeedDirection(unsigned char value) { Set(value,48,4); }

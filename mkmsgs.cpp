@@ -102,7 +102,9 @@ int main(int argc, char *argv[]) {
 
 		     // user (these should be in argv)
 
+        	     127250, /* heading */
 		     128259, /* speed through water */
+        	     128267, /* depth */
 		     129038, /* AIS type A position report */
 		     129039, /* AIS type B position report */
 		     130306, /* environmental parameters */
@@ -138,19 +140,40 @@ int main(int argc, char *argv[]) {
 	    if (field->contains("Resolution") && (!field->contains("Type")||field->at("Type")!="Integer")) {
 	        auto factor = 1.0;
 	        auto res = field->at("Resolution");
+		auto suffix = "";
+		string raw = "";
 		if (field->contains("Units")) {
 		   auto units = field->at("Units").get<string>();
 		   if (units == "rad") {
 		       factor = 180/M_PI;
+		       suffix = "Degrees";
+		       raw = "Radians";
 		   } else if (units == "m/s") {
 		       factor = 1.94384;
+		       suffix = "Knots";
+		       raw = "MetersPerSecond";
+		   } else if (units == "m") {
+		       factor = 3.28084;
+		       suffix = "Feet";
+		       raw = "Meters";
 		   }
 	        }
 		auto resDouble = res.get<double>();
 		char dbl[32];
+		string setter;
+		if (raw != "") {
+			std::snprintf(dbl, sizeof(dbl), "%G", resDouble);
+			// set with SI units
+			setter = "void set" + f.id + raw + "(double value) { Set(value/" + dbl + "," + getterArgs + "); }\n    ";
+			// get with SI units
+			setter += "double get" + f.id + raw + "() const { return " + dbl + " * " + getter + "; }\n    ";
+		}
 		std::snprintf(dbl, sizeof(dbl), "%G", factor * resDouble);
-		string setter = "void set" + f.id + "(double value) { Set(value/" + dbl + "," + getterArgs + "); }\n    ";
-		return setter + "double get" + f.id + "() const { return " + dbl + " * " + getter + "; }";
+		// set with imperial units
+		setter += "void set" + f.id + suffix + "(double value) { Set(value/" + dbl + "," + getterArgs + "); }\n    ";
+		// get with imperial units
+		setter += "double get" + f.id + suffix + "() const { return " + dbl + " * " + getter + "; }";
+		return setter;
 	    }
 	    string type;
 	    string cast = "";

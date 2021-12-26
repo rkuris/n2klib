@@ -92,16 +92,22 @@ namespace n2k {
     Raim getRaim() const { return (Raim)Get(105,1); };
     void setTimeStamp(TimeStamp value) { Set((unsigned char)value,106,6); }
     TimeStamp getTimeStamp() const { return (TimeStamp)Get(106,6); };
-    void setCog(double value) { Set(value/0.00572958,112,16); }
-    double getCog() const { return 0.00572958 * Get(112,16); };
-    void setSog(double value) { Set(value/0.0194384,128,16); }
-    double getSog() const { return 0.0194384 * Get(128,16); };
+    void setCogRadians(double value) { Set(value/0.0001,112,16); }
+    double getCogRadians() const { return 0.0001 * Get(112,16); }
+    void setCogDegrees(double value) { Set(value/0.00572958,112,16); }
+    double getCogDegrees() const { return 0.00572958 * Get(112,16); };
+    void setSogMetersPerSecond(double value) { Set(value/0.01,128,16); }
+    double getSogMetersPerSecond() const { return 0.01 * Get(128,16); }
+    void setSogKnots(double value) { Set(value/0.0194384,128,16); }
+    double getSogKnots() const { return 0.0194384 * Get(128,16); };
     void setCommunicationState(unsigned long value) { Set(value,144,19); }
     unsigned long getCommunicationState() const { return Get(144,19); };
     void setAisTransceiverInformation(AisTransceiverInformation value) { Set((unsigned char)value,163,5); }
     AisTransceiverInformation getAisTransceiverInformation() const { return (AisTransceiverInformation)Get(163,5); };
-    void setHeading(double value) { Set(value/0.00572958,168,16); }
-    double getHeading() const { return 0.00572958 * Get(168,16); };
+    void setHeadingRadians(double value) { Set(value/0.0001,168,16); }
+    double getHeadingRadians() const { return 0.0001 * Get(168,16); }
+    void setHeadingDegrees(double value) { Set(value/0.00572958,168,16); }
+    double getHeadingDegrees() const { return 0.00572958 * Get(168,16); };
     void setRegionalApplication(unsigned char value) { Set(value,184,8); }
     unsigned char getRegionalApplication() const { return Get(184,8); };
     void setRegionalApplication_1(unsigned char value) { Set(value,192,2); }

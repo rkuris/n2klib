@@ -7,7 +7,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi
-ExecStart=/usr/bin/env -C /home/pi/where-your-rrd-file-is /usr/local/bin/wind2rrd
+ExecStart=/usr/bin/env -C /home/pi/where-your-rrd-files-are /usr/local/bin/wind2rrd
 
 [Install]
 WantedBy=multi-user.target

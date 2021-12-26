@@ -9,11 +9,25 @@ To do this, you'll need to build and run *candump_reader*
 to read the candump output, then format it into a rrdtool
 update statement.
 
-First, create your data file:
+First, create your data files. If you only want wind, you
+can delete the last two:
 
 ```
-rrdcreate -s 1 foo.rrd DS:speed:GAUGE:60:0:100 DS:dir:GAUGE:60:0:360 RRA:AVERAGE:0.5:1:864000
+for arg in 1:2900 15:1400 60:1465 240:4380
+do
+avg="$avg RRA:AVERAGE:0.5:$arg"
+min="$min RRA:MIN:0.5:$arg"
+max="$max RRA:MAX:0.5:$arg"
+done
+rrdcreate -s 1 wind.rrd DS:speed:GAUGE:60:0:100 DS:dir:GAUGE:60:0:360 $avg $min $max
+rrdcreate -s 1 depth.rrd DS:depth:GAUGE:60:0:U $avg $min $max
+rrdcreate -s 1 heading.rrd DS:heading:GAUGE:60:0:360 $avg $min $max
 ```
+Check that everything is working:
+```
+wind2rrd - | head
+```
+You should see a few update statements.
 
 You'll then need to run this for a while:
 

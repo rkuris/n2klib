@@ -54,6 +54,9 @@ namespace n2k
     Packet(unsigned char *data_) : canid{0} {
 	    memcpy(data, data_, MAX_CAN_DATA);
     }
+    Packet(canid_t canid_, unsigned char *data_) : canid{canid_} {
+	    memcpy(data, data_, MAX_CAN_DATA);
+    }
     Packet(pgn_t pgn, prio_t priority, addr_t source, unsigned char *data_) : canid{0} {
 	    setPGN(pgn);
 	    setPriority(priority);
